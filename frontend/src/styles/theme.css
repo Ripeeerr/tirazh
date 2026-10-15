@@ -1,0 +1,56 @@
+:root {
+  color-scheme: dark;
+  --neutral-50: #f7f4ec;
+  --neutral-200: #d9d5cb;
+  --neutral-400: #b5b0a5;
+  --neutral-500: #8c887e;
+  --neutral-600: #68655e;
+  --neutral-700: #45443e;
+  --neutral-800: #2b2b28;
+  --neutral-850: #21211f;
+  --neutral-900: #181817;
+  --neutral-950: #101110;
+  --yellow-100: #fff0c6;
+  --yellow-300: #ffe29a;
+  --yellow-700: #795512;
+  --background: var(--neutral-950);
+  --surface: var(--neutral-900);
+  --surface-raised: var(--neutral-850);
+  --text: var(--neutral-50);
+  --muted: var(--neutral-400);
+  --accent: var(--yellow-300);
+  --on-accent: var(--neutral-950);
+  --border: var(--neutral-800);
+  --control-border: var(--neutral-500);
+  --subtle: var(--neutral-850);
+  --error-background: #3b2422;
+  --error-text: #ffb8ab;
+  --success-background: #20372c;
+  --success-text: #a9d5b9;
+  --warning-background: #3b2d22;
+  --warning-text: #efc398;
+  --info-background: #23313d;
+  --info-text: #b3d1ee;
+  --button-background: var(--yellow-300);
+  --button-text: var(--neutral-950);
+  --button-hover: var(--yellow-100);
+  --focus: var(--yellow-300);
+  --hero-background: #101110;
+  --hero-divider: #34342e;
+  --hero-button-hover: var(--yellow-100);
+  --scene-background: #28251f;
+  --scene-border: #5c584d;
+  --scene-label-background: #171713;
+  --scene-label-text: #eee7d6;
+  --hero-text: #fff8e9;
+  --hero-muted: #ddd4c2;
+  --hero-button: #ffe29a;
+  --hero-button-text: #101110;
+  --hero-border: #a9a18f;
+}
+.loading-dot {
+  inline-size: 8px;
+  block-size: 8px;
+  background: var(--accent);
+  border-radius: 50%;
+}

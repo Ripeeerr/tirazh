@@ -1,0 +1,24 @@
+.navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+.navigation a {
+  display: inline-flex;
+  min-height: 48px;
+  padding-block: 12px;
+  align-items: center;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  font-size: 14px;
+  text-decoration: none;
+}
+.navigation a[aria-current] {
+  border-color: var(--accent);
+  color: var(--text);
+}
+.navigation a:hover {
+  color: var(--text);
+}
