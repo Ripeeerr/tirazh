@@ -1,0 +1,64 @@
+.form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1280px;
+  align-items: start;
+}
+.form > :first-child {
+  grid-column: 1/-1;
+}
+.form > :last-child {
+  grid-column: 1/-1;
+}
+.form h2 {
+  font-size: 24px;
+}
+.option {
+  min-width: 0;
+  padding: 20px;
+  margin: 0;
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  border-radius: 4px;
+}
+.option legend {
+  padding: 0 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.option > button {
+  margin-top: 20px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.checkbox input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+@media (max-width: 1000px) {
+  .form {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 800px;
+  }
+}
+@media (max-width: 540px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .option {
+    padding: 16px;
+  }
+}
