@@ -1,0 +1,94 @@
+services:
+  db:
+    image: postgres:17-alpine
+    ports:
+      - '127.0.0.1:5432:5432'
+    environment:
+      POSTGRES_DB: tirazh
+      POSTGRES_USER: tirazh
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U tirazh -d tirazh]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    environment:
+      DATABASE_URL: postgresql+psycopg://tirazh:${POSTGRES_PASSWORD}@db:5432/tirazh
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:8080}
+      SECURE_COOKIES: ${SECURE_COOKIES:-false}
+      UPLOAD_DIRECTORY: /app/var/uploads
+      UV_PROJECT_ENVIRONMENT: /opt/venv
+      UV_CACHE_DIR: /cache/uv
+      UV_LINK_MODE: copy
+      UV_PYTHON_DOWNLOADS: never
+      PYTHONUNBUFFERED: '1'
+      PYTHONDONTWRITEBYTECODE: '1'
+    command:
+      - sh
+      - -ec
+      - |
+        uv sync --frozen --no-dev
+        uv run --no-sync alembic upgrade head
+        uv run --no-sync python -m app.seed
+        exec uv run --no-sync uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --no-proxy-headers
+    volumes:
+      - ./backend:/app
+      - api_venv:/opt/venv
+      - uv_cache:/cache/uv
+      - artwork_data:/app/var/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - uv
+        - run
+        - --no-sync
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"
+      start_period: 120s
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    working_dir: /app
+    environment:
+      API_PROXY_TARGET: http://api:8000
+      BUN_INSTALL_CACHE_DIR: /cache/bun
+    command:
+      - sh
+      - -ec
+      - |
+        bun install --frozen-lockfile
+        exec bun run dev --port 8080 --strictPort
+    ports:
+      - '${WEB_PORT:-8080}:8080'
+    volumes:
+      - ./frontend:/app
+      - frontend_node_modules:/app/node_modules
+      - bun_cache:/cache/bun
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+  artwork_data:
+  api_venv:
+  uv_cache:
+  frontend_node_modules:
+  bun_cache:
